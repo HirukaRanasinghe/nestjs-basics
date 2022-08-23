@@ -26,6 +26,7 @@ export class CoffeesController {
 
   @Post('new-coffee')
   create(@Body() createCoffeDto: CreateCoffeeDto){
+    console.log(createCoffeDto instanceof CreateCoffeeDto); // Displays false.
     return this.coffeesService.create(createCoffeDto);
     //return body;
   }
