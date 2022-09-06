@@ -19,7 +19,7 @@ export class CoffeesController {
   // }
 
   @Get(':id')
-  findOne(@Param('id') id: string): Coffee | HttpException{
+  findOne(@Param('id') id: string){
     return this.coffeesService.findOne(id);
     //return `This action returns #${id} coffee.`;
   }
@@ -32,7 +32,7 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto): Coffee{
+  update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto){
     return this.coffeesService.update(id, updateCoffeeDto);
     // return `This action updates #${id} cofee`;
   }
@@ -43,7 +43,7 @@ export class CoffeesController {
   }
   
   @Delete(':id')
-  deleteCoffee(@Param('id') id: string): void{
+  deleteCoffee(@Param('id') id: string){
     return this.coffeesService.remove(id);
     // return `This action deletes #${id} coffee`;
   }
