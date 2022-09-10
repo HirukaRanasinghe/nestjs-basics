@@ -15,7 +15,10 @@ export class Coffee{
     @JoinTable()
     @ManyToMany(
         type => Flavor,
-        flavor => flavor.coffees
+        flavor => flavor.coffees,
+        {
+            cascade: true // automatically insert/update records that are not in Flavors table.
+        }
     )
     flavors: Flavor[]
     // @Column('json', {nullable: true}) // Flavours should store arrays as JSON and it is optional 
