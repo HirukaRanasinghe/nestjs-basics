@@ -1,15 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
-import { Coffee } from './entities/coffee.entity';
 
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService){}
   @Get('flavours')
-  findAll() {
-    return this.coffeesService.findAll();
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
+    return this.coffeesService.findAll(paginationQuery);
     // return 'This action returns all the coffees';
   }
 
@@ -55,9 +55,10 @@ export class CoffeesController {
   // }
   
   @Get()
-  findAllCoffee(@Query() query): string{
-    const {limit, offset} = query;
-    return `This action returns all coffees. Limit: ${limit}, offset: ${offset}`;
+  findAllCoffee(@Query() paginationQuery: PaginationQueryDto){
+    const {limit, offset} = paginationQuery;
+    return this.coffeesService.findAll(paginationQuery); 
+    // return `This action returns all coffees. Limit: ${limit}, offset: ${offset}`;
   }
 
 }

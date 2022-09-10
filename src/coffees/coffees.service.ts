@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 
 @Injectable()
 export class CoffeesService {
@@ -16,9 +17,12 @@ export class CoffeesService {
         private readonly flavorRepository: Repository<Flavor>
     ){}
 
-    findAll(){
+    findAll(paginationQuery: PaginationQueryDto){
+        const {limit, offset} = paginationQuery;
         return this.coffeeRepository.find({
-            relations: ['flavors']
+            relations: ['flavors'],
+            skip: offset,
+            take: limit
         });
     }
 
@@ -37,7 +41,7 @@ export class CoffeesService {
 
     async create(createCoffeeDto: CreateCoffeeDto){
         const flavors = await Promise.all( //produces array of Flavor entities
-            createCoffeeDto.flavours.map(name => this.preloadFlavorByName(name)), // create flavor in the db if not exist.
+            createCoffeeDto.flavors.map(name => this.preloadFlavorByName(name)), // create flavor in the db if not exist.
         );
 
 
@@ -55,9 +59,9 @@ export class CoffeesService {
 
     async update(id: string, updateCoffeeDto: UpdateCoffeeDto){
         const flavors = 
-            updateCoffeeDto.flavours &&
+            updateCoffeeDto.flavors &&
             (await Promise.all(
-                updateCoffeeDto.flavours.map(name => this.preloadFlavorByName(name)),
+                updateCoffeeDto.flavors.map(name => this.preloadFlavorByName(name)),
             ));
 
         const coffee= await this.coffeeRepository.preload({
